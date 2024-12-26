@@ -1,0 +1,112 @@
+DEFINE_UI_PARAMS(RedHueCtrl, 🔴 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(RedSatCtrl, 🔴 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(RedLumCtrl, 🔴 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+DEFINE_UI_PARAMS(GreenHueCtrl, 🟢 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(GreenSatCtrl, 🟢 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(GreenLumCtrl, 🟢 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+DEFINE_UI_PARAMS(BlueHueCtrl, 🔵 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(BlueSatCtrl, 🔵 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(BlueLumCtrl, 🔵 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+DEFINE_UI_PARAMS(YellowHueCtrl, 🟡 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(YellowSatCtrl, 🟡 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(YellowLumCtrl, 🟡 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+DEFINE_UI_PARAMS(MagentaHueCtrl, 🟣 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(MagentaSatCtrl, 🟣 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(MagentaLumCtrl, 🟣 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+DEFINE_UI_PARAMS(CyanHueCtrl, 🟦 Hue, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(CyanSatCtrl, 🟦 Sat, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(CyanLumCtrl, 🟦 Lum, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.01)
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+    // Red
+	float r_B = 0.f + RedHueCtrl;	// Hue
+    float r_G = 0.f - RedHueCtrl;	// Hue
+	float r_R = 0.f + RedSatCtrl;	// Saturation
+    r_R += RedLumCtrl;	// Luma / Density
+    r_G += RedLumCtrl;	// Luma / Density
+    r_B += RedLumCtrl;	// Luma / Density
+	
+	// Green
+    float g_R = 0.f + GreenHueCtrl;
+    float g_B = 0.f - GreenHueCtrl;
+    float g_G = 0.f + GreenSatCtrl;
+    g_R += GreenLumCtrl;
+    g_G += GreenLumCtrl;
+    g_B += GreenLumCtrl;
+	
+ 	// Blue
+	float b_G = 0.f + BlueHueCtrl;
+    float b_R = 0.f - BlueHueCtrl;
+	float b_B = 0.f + BlueSatCtrl;
+    b_R += BlueLumCtrl;    
+    b_G += BlueLumCtrl;
+    b_B += BlueLumCtrl;
+	
+	// Yellow
+	float y_G = 0.f - YellowHueCtrl;
+    float y_R = 0.f + YellowHueCtrl;
+	float y_B = 0.f - YellowSatCtrl;
+    y_R += YellowLumCtrl;    
+    y_G += YellowLumCtrl;
+    y_B += YellowLumCtrl;
+	
+	// Magenta
+    float m_R = 0.f - MagentaHueCtrl;
+    float m_B = 0.f + MagentaHueCtrl;
+	float m_G = 0.f - MagentaSatCtrl;
+    m_R += MagentaLumCtrl;    
+    m_G += MagentaLumCtrl;
+    m_B += MagentaLumCtrl;
+	
+	// Cyan
+	float c_B = 0.f - CyanHueCtrl;
+    float c_G = 0.f + CyanHueCtrl;
+	float c_R = 0.f - CyanSatCtrl;
+    c_R += CyanLumCtrl;    
+    c_G += CyanLumCtrl;
+    c_B += CyanLumCtrl;
+	
+	// White shall stay pure
+    float w_R = 0.f;
+    float w_G = 0.f;
+	float w_B = 0.f;
+
+    float3 Color;
+	float3 red = make_float3(r_R + 1.f, r_G, r_B);
+    float3 grn = make_float3(g_R, g_G + 1.f, g_B);
+    float3 blu = make_float3(b_R, b_G, b_B + 1.f);
+    float3 cyn = make_float3(c_R, c_G + 1.f, c_B + 1.f);
+    float3 mag = make_float3(m_R + 1.f, m_G, m_B + 1.f);
+    float3 yel = make_float3(y_R + 1.f, y_G + 1.f, y_B);
+    float3 wht = make_float3(w_R + 1.f, w_G + 1.f, w_B + 1.f);
+
+	if (p_R>p_G) {
+		if (p_G>p_B){
+			Color = p_R * red       + p_G * (yel-red) + p_B * (wht-yel);
+		}
+		else if (p_R>p_B){
+			Color = p_R * red       + p_G * (wht-mag) + p_B * (mag-red);
+		}
+		else{
+			Color = p_R * (mag-blu) + p_G * (wht-mag) + p_B * blu;
+		}
+	} else {      
+		if (p_B>p_G){
+			Color = p_R * (wht-cyn) + p_G * (cyn-blu) + p_B * blu;
+		}
+		else if (p_B>p_R){
+			Color = p_R * (wht-cyn) + p_G * grn       + p_B * (cyn-grn);
+		}
+		else{
+			Color = p_R * (yel-grn) + p_G * grn       + p_B * (wht-yel);
+		}
+	}
+        
+	return Color;
+}

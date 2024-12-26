@@ -2,6 +2,9 @@
 
 The Tetra transformation, as described by Steve Yedlin ASC, originally implemented by for Nuke by calvinsilly, ported to Fusion by EmberLightVFX, and presented here as a DCTL for the ResolveFX DCTL plug-in.
 
+## HSL Controls
+This is a fork of npeason's versoin to provice HSL-like controls. This should make camera matching via the vectorscope way easier.
+
 ## Installation:
 
 1. Find Your LUT folder by opening File>Project Settings. Select *Color Management*, then under *Lookup Tables*, click *Open LUT Folder*.
@@ -18,3 +21,4 @@ The Tetra transformation, as described by Steve Yedlin ASC, originally implement
 1. calvinsilly's Nuke implementation: https://github.com/calvinsilly/Tetrahedral-Interpolation
 2. EmberLightVFX's Fusion implementation: https://github.com/EmberLightVFX/Tetrahedral-Interpolation-for-Fusion
 3. Yedlin's video hinting at this transform: http://www.yedlin.net/DisplayPrepDemo/DispPrepDemoFollowup.html
+4. npeason's Resolve implementation: https://github.com/npeason/Tetra-DCTLOFX
