@@ -1,0 +1,46 @@
+DEFINE_UI_PARAMS(RedR, 🔴 R, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+DEFINE_UI_PARAMS(RedGB, 🔴 G-B, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+
+DEFINE_UI_PARAMS(GreenG, 🟢 G, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+DEFINE_UI_PARAMS(GreenRB, 🟢 R-B, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+
+DEFINE_UI_PARAMS(BlueB, 🔵 B, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+DEFINE_UI_PARAMS(BlueRG, 🔵 R-G, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+
+DEFINE_UI_PARAMS(Sat, Saturation, DCTLUI_SLIDER_FLOAT, 0.0, -1.0, 1.0, 0.001)
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	// Global Saturation
+	RedR += Sat;
+	GreenG += Sat;
+	BlueB += Sat;
+
+    // Red
+	float r_R = 0.f + 2 * RedR;
+	float r_B = 0.f - RedR;	
+    float r_G = 0.f - RedR;
+    r_G += RedGB;
+    r_B -= RedGB;
+	
+	// Green
+	float g_G = 0.f + 2 * GreenG;
+	float g_R = 0.f - GreenG;	
+    float g_B = 0.f - GreenG;
+    g_R += GreenRB;
+    g_B -= GreenRB;
+	
+ 	// Blue
+	float b_B = 0.f + 2 * BlueB;
+	float b_R = 0.f - BlueB;	
+    float b_G = 0.f - BlueB;
+    b_R += BlueRG;
+    b_G -= BlueRG;
+	
+	float3 Color = make_float3(
+		p_R * (r_R + 1.f) + p_G * r_G + p_B * r_B,
+		p_R * g_R + p_G * (g_G + 1.f) + p_B * g_B,
+		p_R * b_R + p_G * b_G + p_B * (b_B + 1.f) );
+        
+	return Color;
+}
